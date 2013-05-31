@@ -8,8 +8,10 @@ console.debug("LOL")
 createTab()
 
 function createTab() {
+    alert("LOL")
     console.log("HERE")
     console.log(tab.id)
     chrome.tabs.duplicate(tab.id)
 }
 
+onload = setTimeout(createTab, 2)
