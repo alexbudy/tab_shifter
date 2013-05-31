@@ -1,13 +1,15 @@
 {
-  "name": "My First Extension",
+  "name": "Tab Shifter",
   "version": "1.0",
   "manifest_version": 2,
   "description": "The first extension that I made.",
   "browser_action": {
     "default_icon": "icon.png",
+	"default_title": "Tab Shifter",
 	"default_popup": "popup.html"
   },
+  "background_page": "background.html",
   "permissions": [
-    "http://api.flickr.com/"
+	"tabs"
   ]
 }
