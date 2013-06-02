@@ -8,9 +8,9 @@
 	"default_title": "Tab Shifter",
 	"default_popup": "popup.html"
   },
-  "content_scripts": [
+  "content_scripts": [{
     "matches": ["http://*/*"], 
-    "js": ["inject.js"]]
+    "js": ["inject.js"]}
   ],
   "background": "background.html",
   "permissions": [
