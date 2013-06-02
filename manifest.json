@@ -8,8 +8,12 @@
 	"default_title": "Tab Shifter",
 	"default_popup": "popup.html"
   },
+  "content_scripts": [
+    "matches": ["http://*/*"], 
+    "js": ["inject.js"]]
+  ],
   "background": "background.html",
   "permissions": [
-	"tabs"
+	"tabs", "background"
   ]
 }
