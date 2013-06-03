@@ -1,26 +1,55 @@
 <!doctype html>
 <html>
   <head>
-    <title>Getting Started Extension's Popup</title>
+    <title>Set Page Color Popup</title>
     <style>
-      body {
-        min-width:357px;
-        overflow-x:hidden;
-      }
+    body {
+      overflow: hidden;
+      margin: 0px;
+      padding: 0px;
+      background: white;
+    }
 
-      img {
-        margin:5px;
-        border:2px solid black;
-        vertical-align:middle;
-        width:75px;
-        height:75px;
-      }
+    div:first-child {
+      margin-top: 0px;
+    }
+
+    div {
+      cursor: pointer;
+      text-align: center;
+      padding: 1px 3px;
+      font-family: sans-serif;
+      font-size: 0.8em;
+      width: 100px;
+      margin-top: 1px;
+      background: #cccccc;
+    }
+    div:hover {
+      background: #aaaaaa;
+    }
+    #red {
+      border: 1px solid red;
+      color: red;
+    }
+    #blue {
+      border: 1px solid blue;
+      color: blue;
+    }
+    #green {
+      border: 1px solid green;
+      color: green;
+    }
+    #yellow {
+      border: 1px solid yellow;
+      color: yellow;
+    }
     </style>
-
-    <!-- JavaScript and HTML must be in separate files for security. -->
     <script src="popup.js"></script>
   </head>
   <body>
-	<b><font color = "red">  h3llo world!!</font></b>
+    <div id="red">red</div>
+    <div id="blue">blue</div>
+    <div id="green">green</div>
+    <div id="yellow">yellow</div>
   </body>
 </html>

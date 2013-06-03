@@ -1,17 +1,15 @@
-// Copyright (c) 2012 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+function click(e) {
+  chrome.tabs.query({'active': true}, function(tabs) {
+    chrome.tabs.update(tabs[0].id, {url: 'http://espn.com'});
+    console.log(tabs[0]);
+});
 
-console.log("LOL")
-console.debug("LOL")
-
-createTab()
-
-function createTab() {
-    alert("LOL")
-    console.log("HERE")
-    console.log(tab.id)
-    chrome.tabs.duplicate(tab.id)
+  console.log("CLICKED A BUTTON");
 }
 
-onload = setTimeout(createTab, 2)
+document.addEventListener('DOMContentLoaded', function () {
+  var divs = document.querySelectorAll('div');
+  for (var i = 0; i < divs.length; i++) {
+    divs[i].addEventListener('click', click);
+  }
+});
