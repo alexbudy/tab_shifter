@@ -1,7 +1,21 @@
 function click(e) {
-  chrome.tabs.query({'active': true}, function(tabs) {
-    chrome.tabs.update(tabs[0].id, {url: 'http://espn.com'});
-    console.log(tabs[0]);
+    console.log(e)
+  chrome.tabs.query({'currentWindow': true}, function(tabs) {
+    var tabCount = tabs.length
+    var activeTab
+    for (var i = 0; i < tabCount; i++) {
+        if (tabs[i].active == true) {
+            activeTab = tabs[i]
+            break
+        }
+    }
+    var tabId = activeTab.id
+    var tabPos = activeTab.index
+    var newIndex = tabPos + 1
+    if (newIndex >= tabCount) {
+        newIndex = 0
+    }
+    chrome.tabs.move(tabId, {index:newIndex});
 });
 
   console.log("CLICKED A BUTTON");
@@ -13,3 +27,5 @@ document.addEventListener('DOMContentLoaded', function () {
     divs[i].addEventListener('click', click);
   }
 });
+
+window.addEventListener('keyup', click, false)
