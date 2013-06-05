@@ -2,12 +2,20 @@
   "name": "A browser action with a popup that changes the page color.",
   "version": "1.0",
   "permissions": [
-    "tabs", "http://*/*", "https://*/*"
+    "tabs", "http://*/*", "https://*/*", "background"
   ],
   "browser_action": {
       "default_title": "Set this page's color.",
       "default_icon": "icon.png",
       "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "js": ["inject.js"]
+    }],
+  "background" : {
+      "scripts": ["background.js"]
   },
   "manifest_version": 2
 }
