@@ -1,1 +1,4 @@
 Chrome extension for tab shifting
+
+Ctrl+Left/Right = Moves active tab left/right one position
+Ctrl+Up/Down = Pins/unpins active tab
