@@ -1,10 +1,3 @@
-/*
-chrome.extension.sendRequest({
-    "greeting": "hello",
-    "var1": "variable 1",
-    "var2": true
-});
-*/
 console.log("INJECTED")
 
 window.addEventListener('keyup', moveTab, false)
@@ -13,22 +6,30 @@ function moveTab(e)
 {
     var RIGHT = 39
     var LEFT = 37
-    var direction 
+    var PIN = 38
+    var UNPIN = 40
+    var tabAction 
     switch(e.which) {
          case RIGHT:
-            direction = "right"
+            tabAction = "right"
             break
          case LEFT:
-            direction = "left"
+            tabAction = "left"
+            break            
+         case PIN:
+            tabAction = "pin"
+            break            
+         case UNPIN:
+            tabAction = "unpin"
             break            
      } 
     console.log(e)
 
-    if (e.ctrlKey && direction) {
-        console.log("sending request to move tab " + direction)
+    if (e.ctrlKey && tabAction) {
+        console.log("sending request to move tab " + tabAction)
         chrome.extension.sendRequest({
             "request" : "moveTab",
-            "direction" : direction
+            "tabAction" : tabAction
         })
     }
 }
