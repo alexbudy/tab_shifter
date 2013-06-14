@@ -1,5 +1,3 @@
-console.log("INJECTED")
-
 window.addEventListener('keyup', moveTab, false)
 
 function moveTab(e) 
@@ -23,10 +21,8 @@ function moveTab(e)
             tabAction = "unpin"
             break            
      } 
-    console.log(e)
 
     if (e.ctrlKey && tabAction) {
-        console.log("sending request to move tab " + tabAction)
         chrome.extension.sendRequest({
             "request" : "moveTab",
             "tabAction" : tabAction

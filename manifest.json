@@ -1,6 +1,6 @@
 {
-  "name": "A simple tab shifter tool - use Ctr+Arrows to control tab positions!",
-  "version": "1.0",
+  "name": "A simple and useful tab shifter tool",
+  "version": "1.1",
   "permissions": [
     "tabs", "background"
   ],

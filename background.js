@@ -1,9 +1,3 @@
-console.log("in background")
-
-chrome.commands.onCommand.addListener(function(command) {
-    console.log("command", command)
-});
-
 chrome.extension.onRequest.addListener(
     function(request, sender, sendResponse) {
           chrome.tabs.query({'currentWindow': true}, function(tabs) {
@@ -27,22 +21,24 @@ chrome.extension.onRequest.addListener(
                     newIndex++
                     if (toPin && newIndex >= pinCount) newIndex = 0
                     else if (newIndex >= tabCount) newIndex = pinCount
+                    chrome.tabs.move(tabId, {index:newIndex})
                     break
                 case 'left':
                     newIndex--
                     if (newIndex < 0 && toPin) newIndex = (pinCount - 1)
                     else if (tabs[newIndex].pinned) newIndex = (tabCount - 1)
                     else if (newIndex < 0) newIndex = (tabCount - 1)
+                    chrome.tabs.move(tabId, {index:newIndex})
                     break 
                 case 'pin':
                     toPin = true
+                    chrome.tabs.update(tabId, {pinned:toPin})
                     break
                 case 'unpin':
                     toPin = false
+                    chrome.tabs.update(tabId, {pinned:toPin})
                     break
                     
             }
-            chrome.tabs.update(tabId, {pinned:toPin})
-            chrome.tabs.move(tabId, {index:newIndex})
           })}
 )
