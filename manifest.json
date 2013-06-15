@@ -1,5 +1,5 @@
 {
-  "name": "A simple and useful tab shifter tool",
+  "name": "Tab Shifter",
   "version": "1.1",
   "permissions": [
     "tabs", "background"
