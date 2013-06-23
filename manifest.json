@@ -1,6 +1,6 @@
 {
   "name": "Tab Shifter",
-  "version": "1.1",
+  "version": "1.3",
   "permissions": [
     "tabs", "background"
   ],
