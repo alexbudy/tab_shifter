@@ -3,14 +3,14 @@ chrome.extension.onRequest.addListener(
           chrome.tabs.query({'currentWindow': true}, function(tabs) {
             var tabCount = tabs.length
             var activeTab
+            var rightTab
             var pinCount = 0
             for (var i = 0; i < tabCount; i++) {
                 if (tabs[i].active) {
+                    if (i+1 < tabCount) { rightTab = tabs[i+1] }
                     activeTab = tabs[i]
                 }
-                if (tabs[i].pinned) {
-                    pinCount++
-                }
+                if (tabs[i].pinned)     pinCount++
             }
             var tabId = activeTab.id
             var tabPos = activeTab.index
@@ -35,6 +35,9 @@ chrome.extension.onRequest.addListener(
                     break 
                 case 'pin':
                     chrome.tabs.update(tabId, {pinned:true})
+                    if (!pinned && rightTab) {
+                        chrome.tabs.update(rightTab.id, {active:true})
+                    }
                     break
                 case 'unpin':
                     chrome.tabs.update(tabId, {pinned:false})
