@@ -2,11 +2,13 @@ chrome.extension.onRequest.addListener(
     function(request, sender, sendResponse) {
           chrome.tabs.query({'currentWindow': true}, function(tabs) {
             var tabCount = tabs.length
+            var leftTab
             var activeTab
             var rightTab
             var pinCount = 0
             for (var i = 0; i < tabCount; i++) {
                 if (tabs[i].active) {
+                    if (i > 0) {leftTab = tabs[i-1] }
                     if (i+1 < tabCount) { rightTab = tabs[i+1] }
                     activeTab = tabs[i]
                 }
@@ -35,8 +37,12 @@ chrome.extension.onRequest.addListener(
                     break 
                 case 'pin':
                     chrome.tabs.update(tabId, {pinned:true})
-                    if (!pinned && rightTab) {
-                        chrome.tabs.update(rightTab.id, {active:true})
+                    if (!pinned) {
+                        if (rightTab) {
+                            chrome.tabs.update(rightTab.id, {active:true})
+                        } else if (leftTab) {
+                            chrome.tabs.update(leftTab.id, {active:true})
+                        }
                     }
                     break
                 case 'unpin':
