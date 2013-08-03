@@ -36,8 +36,11 @@ chrome.extension.onRequest.addListener(
                     chrome.tabs.move(tabId, {index:newIndex})
                     break 
                 case 'pin':
-                    chrome.tabs.update(tabId, {pinned:true})
-                    if (!pinned) {
+                    if (pinned) {
+                        chrome.tabs.update(tabId, {pinned:false})
+                    }
+                    else {
+                        chrome.tabs.update(tabId, {pinned:true})
                         if (rightTab) {
                             chrome.tabs.update(rightTab.id, {active:true})
                         } else if (leftTab) {
@@ -45,10 +48,6 @@ chrome.extension.onRequest.addListener(
                         }
                     }
                     break
-                case 'unpin':
-                    chrome.tabs.update(tabId, {pinned:false})
-                    break
-                    
             }
           })}
 )

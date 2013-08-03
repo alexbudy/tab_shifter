@@ -5,7 +5,6 @@ function moveTab(e)
     var RIGHT = 39
     var LEFT = 37
     var PIN = 38
-    var UNPIN = 40
     var tabAction 
     switch(e.which) {
          case RIGHT:
@@ -16,9 +15,6 @@ function moveTab(e)
             break            
          case PIN:
             tabAction = "pin"
-            break            
-         case UNPIN:
-            tabAction = "unpin"
             break            
      } 
 
