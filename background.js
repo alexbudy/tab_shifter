@@ -1,6 +1,10 @@
 chrome.extension.onRequest.addListener(
     function(request, sender, sendResponse) {
           chrome.tabs.query({'currentWindow': true}, function(tabs) {
+						if (request.inTextBox == true && localStorage['disable-in-textbox'] == 'true') {
+							return
+						}
+
             var tabCount = tabs.length
             var leftTab
             var activeTab

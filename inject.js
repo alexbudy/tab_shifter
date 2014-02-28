@@ -17,11 +17,18 @@ function moveTab(e)
             tabAction = "pin"
             break            
      } 
-
+		
+		 var inTextBox = (document.activeElement.nodeName.toUpperCase() == 'TEXTAREA' 
+		 || document.activeElement.nodeName.toUpperCase() == 'INPUT' 
+		 || (document.activeElement.hasAttribute('role') 
+		 			&& document.activeElement.getAttribute('role').toLowerCase() == 'textbox')) //in case in google email compose field (special case)
+		
     if (e.ctrlKey && tabAction) {
         chrome.extension.sendRequest({
             "request" : "moveTab",
-            "tabAction" : tabAction
+						"tabAction" : tabAction,
+						"inTextBox" : inTextBox,
         })
     }
 }
+
