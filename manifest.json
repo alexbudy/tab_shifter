@@ -2,7 +2,7 @@
   "name": "Tab Shifter",
   "version": "1.6",
   "permissions": [
-    "tabs", "background"
+    "tabs", "background", "storage"
   ],
   "content_scripts": [
     {
@@ -12,5 +12,6 @@
   "background" : {
       "scripts": ["background.js"]
   },
+  "options_page": "options.html",
   "manifest_version": 2
 }
