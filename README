@@ -2,3 +2,5 @@ Chrome extension for tab shifting
 
 Ctrl+Left/Right = Moves active tab left/right one position
 Ctrl+Up = Pins/unpins active tab
+
+Setting allows for disabling whilst in a text edit box, as this can interfere with writing
