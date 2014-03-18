@@ -1,6 +1,6 @@
 var checkbox_values = { //default values here
 	"disable-in-textbox" : 'true',
-	"keep-focus-on-pin" : 'false'
+	"keep-focus-on-pin" : 'true'
 }	
 
 for (var key in checkbox_values) {
