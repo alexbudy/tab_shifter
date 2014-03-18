@@ -1,19 +1,11 @@
-var disabled_id="disable-in-textbox"
-
 function saveOptions() {
-	var disabled_in_text=document.getElementById(disabled_id).checked
-	localStorage[disabled_id]=disabled_in_text
+	localStorage[this.id] = this.checked
 }
 
-function loadDisabledInTextboxOption() {
-	var disabled=localStorage[disabled_id]
-	if (disabled == undefined) {
-		localStorage[disabled_id]=true
-		disabled=true
-	}
-	return (disabled == 'true')
-}
+var chkBoxes=document.getElementsByName("options")
 
-var chkBox=document.getElementById(disabled_id)
-chkBox.addEventListener('click', saveOptions)
-chkBox.checked=loadDisabledInTextboxOption()
+for (var i = 0; i < chkBoxes.length; i++) {
+	var chkBox = chkBoxes[i]
+	chkBox.addEventListener('click', saveOptions)
+	chkBox.checked=(localStorage[chkBox.id] == 'true')
+}

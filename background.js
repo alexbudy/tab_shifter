@@ -1,3 +1,12 @@
+var checkbox_values = { //default values here
+	"disable-in-textbox" : 'true',
+	"keep-focus-on-pin" : 'false'
+}	
+
+for (var key in checkbox_values) {
+	localStorage[key] = checkbox_values[key]
+}
+
 chrome.extension.onRequest.addListener(
     function(request, sender, sendResponse) {
           chrome.tabs.query({'currentWindow': true}, function(tabs) {
@@ -45,11 +54,15 @@ chrome.extension.onRequest.addListener(
                     }
                     else {
                         chrome.tabs.update(tabId, {pinned:true})
-                        if (rightTab) {
-                            chrome.tabs.update(rightTab.id, {active:true})
-                        } else if (leftTab) {
-                            chrome.tabs.update(leftTab.id, {active:true})
-                        }
+												if (localStorage['keep-focus-on-pin'] == 'false') {
+                        		if (rightTab) {
+                            	chrome.tabs.update(rightTab.id, {active:true})
+                       		 	} else if (leftTab) {
+                          	  chrome.tabs.update(leftTab.id, {active:true})
+														}
+												} else {
+													chrome.tabs.update(tabId, {active:true})
+												}
                     }
                     break
             }
