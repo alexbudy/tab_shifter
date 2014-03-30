@@ -1,6 +1,7 @@
 var checkbox_values = { //default values here
 	"disable-in-textbox" : 'true',
-	"keep-focus-on-pin" : 'true'
+	"keep-focus-on-pin" : 'true',
+	"unpin-to-original-pos" : 'true'
 }	
 
 for (var key in checkbox_values) {
@@ -51,8 +52,13 @@ chrome.extension.onRequest.addListener(
                 case 'pin':
                     if (pinned) {
                         chrome.tabs.update(tabId, {pinned:false})
+												var tabPosKey = 'tab_'+tabId
+												if (tabPosKey in localStorage && localStorage["unpin-to-original-pos"] == 'true') {
+													chrome.tabs.move(tabId, {index: parseInt(localStorage[tabPosKey])})
+												}
                     }
                     else {
+												localStorage['tab_'+tabId] = tabPos
                         chrome.tabs.update(tabId, {pinned:true})
 												if (localStorage['keep-focus-on-pin'] == 'false') {
                         		if (rightTab) {
