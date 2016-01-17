@@ -1,19 +1,28 @@
-var checkbox_values = { //default values here
-	"disable-in-textbox" : 'true',
-	"keep-focus-on-pin" : 'true',
-	"unpin-to-original-pos" : 'true'
-}	
-
-for (var key in checkbox_values) {
-	localStorage[key] = checkbox_values[key]
+var checkboxValues = { // initial default values here, should match options.js
 }
+
+chrome.storage.sync.get({
+        disableWhileInTextbox : true, //default values here
+        keepFocusWhenPinning  : true,
+        unpinToOriginalPos : true
+    }, function(items) {
+        for (item in items) {
+            checkboxValues[item] = items[item]
+        }
+});
+
+chrome.storage.onChanged.addListener(function(changes, namespace) {
+    for (key in changes) {
+        checkboxValues[key] = changes[key].newValue   
+    }
+})
 
 chrome.extension.onRequest.addListener(
     function(request, sender, sendResponse) {
           chrome.tabs.query({'currentWindow': true}, function(tabs) {
-						if (request.inTextBox == true && localStorage['disable-in-textbox'] == 'true') {
-							return
-						}
+			if (request.inTextBox == true && checkboxValues['disableWhileInTextbox']) {
+				return
+			}
 
             var tabCount = tabs.length
             var leftTab
@@ -52,23 +61,23 @@ chrome.extension.onRequest.addListener(
                 case 'pin':
                     if (pinned) {
                         chrome.tabs.update(tabId, {pinned:false})
-												var tabPosKey = 'tab_'+tabId
-												if (tabPosKey in localStorage && localStorage["unpin-to-original-pos"] == 'true') {
-													chrome.tabs.move(tabId, {index: parseInt(localStorage[tabPosKey])})
-												}
+						var tabPosKey = 'tab_'+tabId
+						if (tabPosKey in localStorage && checkboxValues["unpinToOriginalPos"]) {
+							chrome.tabs.move(tabId, {index: parseInt(localStorage[tabPosKey])})
+						}
                     }
                     else {
-												localStorage['tab_'+tabId] = tabPos
+						localStorage['tab_'+tabId] = tabPos
                         chrome.tabs.update(tabId, {pinned:true})
-												if (localStorage['keep-focus-on-pin'] == 'false') {
-                        		if (rightTab) {
-                            	chrome.tabs.update(rightTab.id, {active:true})
-                       		 	} else if (leftTab) {
-                          	  chrome.tabs.update(leftTab.id, {active:true})
-														}
-												} else {
-													chrome.tabs.update(tabId, {active:true})
-												}
+						if (!checkboxValues["keepFocusWhenPinning"]) {
+                       		if (rightTab) {
+                           	chrome.tabs.update(rightTab.id, {active:true})
+                     	} else if (leftTab) {
+                            chrome.tabs.update(leftTab.id, {active:true})
+						}
+    					} else {
+	       					chrome.tabs.update(tabId, {active:true})
+			     		}
                     }
                     break
             }
