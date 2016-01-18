@@ -5,6 +5,8 @@ function moveTab(e)
     var RIGHT = 39
     var LEFT = 37
     var PIN = 38
+    var DOWN = 40
+
     var tabAction 
     switch(e.which) {
          case RIGHT:
@@ -15,7 +17,12 @@ function moveTab(e)
             break            
          case PIN:
             tabAction = "pin"
-            break            
+            break    
+         case DOWN:
+            if (e.shiftKey) {
+                tabAction = "newWinDown"
+            }
+            break
      } 
 		
 		 var inTextBox = (document.activeElement.nodeName.toUpperCase() == 'TEXTAREA' 
@@ -27,7 +34,7 @@ function moveTab(e)
         chrome.extension.sendRequest({
             "request" : "moveTab",
 						"tabAction" : tabAction,
-						"inTextBox" : inTextBox,
+						"inTextBox" : inTextBox
         })
     }
 }

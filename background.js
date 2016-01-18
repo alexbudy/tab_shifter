@@ -17,6 +17,25 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
     }
 })
 
+// takes a windows array and current window index, returns next largest window index, 
+//      or first if current is largest
+function findNextLargestInWindowArray(windows, currentWinId) {
+    var returnWinId = 0
+
+    for (var i = 0; i < windows.length; i++) {
+        if (currentWinId < windows[i].id) {
+            returnWinId = windows[i].id
+            break
+        }
+    }
+
+    if (returnWinId == 0) {
+        returnWinId = windows[0].id
+    }
+
+    return returnWinId
+}
+
 chrome.extension.onRequest.addListener(
     function(request, sender, sendResponse) {
           chrome.tabs.query({'currentWindow': true}, function(tabs) {
@@ -79,6 +98,31 @@ chrome.extension.onRequest.addListener(
 	       					chrome.tabs.update(tabId, {active:true})
 			     		}
                     }
+                    break
+                case 'newWinDown': // this key stroke cycles the tab among windows
+                    var activeWindowId = activeTab.windowId
+                    // possibly get all window type = normal in obj
+                    chrome.windows.getAll({windowTypes : ['normal']}, function(windows) {
+                        console.log("active id: " + activeWindowId)
+                        for (var i = 0; i < windows.length; i++) {
+                            console.log(windows[i].id)
+                        }
+
+                        if (windows.length > 1) { // if only one window only thing to do is move to new tab
+                            var newWinId = findNextLargestInWindowArray(windows, activeWindowId)
+
+                           chrome.tabs.move(tabId, {index : -1, windowId : newWinId}, function(tab) {
+                                chrome.tabs.update(tab.id, {'active': true, 'pinned': pinned}, function(tab) {
+                                    chrome.windows.update(tab.windowId, {focused : true})
+                                    
+                                })
+                           })
+                        }
+
+                    })
+                    //chrome.windows.create({tabId: tabId})
+                    //chrome.tabs.move(tabId, {'index' : -1})
+                        
                     break
             }
           })}
