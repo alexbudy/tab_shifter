@@ -6,24 +6,30 @@ function moveTab(e)
     var LEFT = 37
     var PIN = 38
     var DOWN = 40
+    var SPACE = 32
 
     var tabAction 
     switch(e.which) {
-         case RIGHT:
+        case RIGHT:
             tabAction = "right"
             break
-         case LEFT:
+        case LEFT:
             tabAction = "left"
             break            
-         case PIN:
+        case PIN:
             tabAction = "pin"
             break    
-         case DOWN:
+        case DOWN: // cycle among all windows
             if (e.shiftKey) {
                 tabAction = "newWinDown"
             }
             break
-     } 
+        case SPACE: // bring current tab to new window, and back
+            if (e.shiftKey) {
+                tabAction = "shiftSpace"
+            }
+            break
+     }  
 		
 		 var inTextBox = (document.activeElement.nodeName.toUpperCase() == 'TEXTAREA' 
 		 || document.activeElement.nodeName.toUpperCase() == 'INPUT' 

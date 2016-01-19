@@ -57,9 +57,11 @@ chrome.extension.onRequest.addListener(
                 if (tabs[i].pinned)     pinCount++
             }
             var tabId = activeTab.id
+            var activeWindowId = activeTab.windowId
             var tabPos = activeTab.index
             var newIndex = tabPos
             var pinned = activeTab.pinned
+
             switch(request.tabAction) {
                 case 'right':
                     newIndex++
@@ -80,34 +82,28 @@ chrome.extension.onRequest.addListener(
                 case 'pin':
                     if (pinned) {
                         chrome.tabs.update(tabId, {pinned:false})
-						var tabPosKey = 'tab_'+tabId
-						if (tabPosKey in localStorage && checkboxValues["unpinToOriginalPos"]) {
-							chrome.tabs.move(tabId, {index: parseInt(localStorage[tabPosKey])})
-						}
+                        var tabPosKey = 'tab_'+tabId
+                        if (tabPosKey in localStorage && checkboxValues["unpinToOriginalPos"]) {
+                            chrome.tabs.move(tabId, {index: parseInt(localStorage[tabPosKey])})
+                            delete localStorage[tabPosKey]
+                        }
                     }
                     else {
-						localStorage['tab_'+tabId] = tabPos
+                        localStorage['tab_'+tabId] = tabPos
                         chrome.tabs.update(tabId, {pinned:true})
-						if (!checkboxValues["keepFocusWhenPinning"]) {
-                       		if (rightTab) {
-                           	chrome.tabs.update(rightTab.id, {active:true})
-                     	} else if (leftTab) {
+                        if (!checkboxValues["keepFocusWhenPinning"]) {
+                            if (rightTab) {
+                            chrome.tabs.update(rightTab.id, {active:true})
+                        } else if (leftTab) {
                             chrome.tabs.update(leftTab.id, {active:true})
-						}
-    					} else {
-	       					chrome.tabs.update(tabId, {active:true})
-			     		}
+                        }
+                        } else {
+                            chrome.tabs.update(tabId, {active:true})
+                        }
                     }
                     break
                 case 'newWinDown': // this key stroke cycles the tab among windows
-                    var activeWindowId = activeTab.windowId
-                    // possibly get all window type = normal in obj
                     chrome.windows.getAll({windowTypes : ['normal']}, function(windows) {
-                        console.log("active id: " + activeWindowId)
-                        for (var i = 0; i < windows.length; i++) {
-                            console.log(windows[i].id)
-                        }
-
                         if (windows.length > 1) { // if only one window only thing to do is move to new tab
                             var newWinId = findNextLargestInWindowArray(windows, activeWindowId)
 
@@ -117,13 +113,56 @@ chrome.extension.onRequest.addListener(
                                     
                                 })
                            })
+                            delete localStorage[tabId + "_win_from"]
+                            delete localStorage[tabId + "_prev_win_tab_pos"]
+                        } else if (tabCount > 1){ // 
+                            chrome.windows.create({tabId: tabId}, function(window) {
+                                chrome.tabs.update(tabId, {'pinned' : pinned})
+                                localStorage[tabId+"_win_from"] = activeWindowId
+                                localStorage[tabId+"_prev_win_tab_pos"] = tabPos
+                            })
                         }
-
                     })
-                    //chrome.windows.create({tabId: tabId})
-                    //chrome.tabs.move(tabId, {'index' : -1})
                         
+                    break
+                case 'shiftSpace': // brings current tab to new window, and back
+                    if (tabCount > 1) {
+                        chrome.windows.create({tabId: tabId}, function(window) {
+                            chrome.tabs.update(tabId, {'pinned' : pinned})
+                            localStorage[tabId+"_win_from"] = activeWindowId
+                            localStorage[tabId+"_prev_win_tab_pos"] = tabPos
+                        })
+                    } else if (tabCount == 1) { // if tab count is 1, want to bring this tab back to prev window, or first possible window
+                        chrome.windows.getAll({windowTypes : ['normal']}, function(windows) {
+                            if (windows.length > 1) { // if only one window only thing to do is move to new tab
+                                var winFromId = parseInt(localStorage[tabId+"_win_from"])
+                                if (!windowIdInWindowArray(windows, winFromId)) {
+                                    winFromId = findNextLargestInWindowArray(windows, activeWindowId)
+                                }
+                                var prevTabPosKey = tabId + "_prev_win_tab_pos"
+                                var prevTabPos = parseInt(localStorage[prevTabPosKey] || -1)
+
+                                chrome.tabs.move(tabId, {index : prevTabPos, windowId : winFromId}, function(tab) {
+                                    chrome.tabs.update(tab.id, {'active': true, 'pinned': pinned}, function(tab) {
+                                        chrome.windows.update(tab.windowId, {focused : true})
+                                    })
+                                })
+                            }
+                            delete localStorage[tabId + "_win_from"]
+                            delete localStorage[tabId + "_prev_win_tab_pos"]
+                        })
+                    }
                     break
             }
           })}
 )
+
+function windowIdInWindowArray(winArr, winId) {
+    for (var i = 0; i < winArr.length; i++) {
+        if (winId == winArr[i].id) {
+            return true
+        }
+    }
+
+    return false
+}
