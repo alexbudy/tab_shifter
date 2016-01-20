@@ -2,21 +2,48 @@
 	<head>
 		<title>
 			Settings for Tab Shifter Chrome Extension
-		</title>
+		</title>	
+		<link rel="stylesheet" type="text/css" href="options.css">
 	</head>
 	<body>
 		<h1>Tab Shifter Settings</h1>
-		<input type="checkbox" name="options" id="disableWhileInTextbox" >
-			Disable Controls While Cursor in Text Box
-		
-		<br>
-		<input type="checkbox" name="options" id="keepFocusWhenPinning" >
+		<h2>General Settings</h2>
+		<ul>
+		<li>
+			<input type="checkbox" name="options" id="disableWhileInTextbox" >
+			Disable Controls While Cursor in Text Box</li>
+		</ul>
+
+		<h2>Pin/Unpin Tab Settings (Ctrl + Up)</h2>
+		<ul>
+			<li><input type="checkbox" name="options" id="keepFocusWhenPinning" >
 			Keep Focus On Tab When Pinning	
-
-		<br>
-		<input type="checkbox" name="options" id="unpinToOriginalPos" >
+		</li>
+		<li>
+			<input type="checkbox" name="options" id="unpinToOriginalPos" >
 			Move Tab to Original Position When Unpinning
+		</li>
+		</ul>
 
+		<h2>Move Between Windows Settings</h2>
+		<ul>
+		<li>
+			<input type="checkbox" name="options" id="enableShiftSpace" >
+			Enable <b>Ctrl+Shift+Space</b> - bring current tab to new window and back
+		</li>
+		<li>
+			<input type="checkbox" name="options" id="enableShiftDown" >
+			Enable <b>Ctrl+Shift+Down</b> - move current tab to next Chrome Window
+		</li>
+		</ul>
+
+		<h2>Tab Moving Settings (Ctrl + Right/Left)</h2>
+		<ul>
+		<li>
+			<input type="checkbox" name="options" id="enableShiftRightLeft" >
+			Enable <b>Ctrl+Shift+Right/Left</b> - move active tab all the way to the right or left
+		</li>
+		</ul>
 		<script type="text/javascript" src="options.js"></script>
 	</body>
 </html>

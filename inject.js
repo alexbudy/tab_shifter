@@ -11,10 +11,18 @@ function moveTab(e)
     var tabAction 
     switch(e.which) {
         case RIGHT:
-            tabAction = "right"
+            if (e.shiftKey) {
+                tabAction = "fullright"
+            } else {
+                tabAction = "right"
+            }
             break
         case LEFT:
-            tabAction = "left"
+            if (e.shiftKey) {
+                tabAction = "fullleft"
+            } else {
+                tabAction = "left"
+            }
             break            
         case PIN:
             tabAction = "pin"

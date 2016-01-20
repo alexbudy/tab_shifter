@@ -4,7 +4,11 @@ var checkboxValues = { // initial default values here, should match options.js
 chrome.storage.sync.get({
         disableWhileInTextbox : true, //default values here
         keepFocusWhenPinning  : true,
-        unpinToOriginalPos : true
+        unpinToOriginalPos : true,
+        enableShiftSpace : true,
+        enableShiftDown : true,
+        enableShiftRightLeft : false
+
     }, function(items) {
         for (item in items) {
             checkboxValues[item] = items[item]
@@ -63,12 +67,32 @@ chrome.extension.onRequest.addListener(
             var pinned = activeTab.pinned
 
             switch(request.tabAction) {
+                case 'fullright':
+                    if (checkboxValues['enableShiftRightLeft']) {
+                        if (pinned) {
+                            newIndex = pinCount - 1
+                        } else {
+                            newIndex = tabCount - 1
+                        }
+                        moveTab(tabId, newIndex)
+                        break
+                    }
                 case 'right':
                     newIndex++
                     if (pinned && newIndex >= pinCount) newIndex = 0
                     else if (newIndex >= tabCount) newIndex = pinCount
-                    chrome.tabs.move(tabId, {index:newIndex})
+                    moveTab(tabId, newIndex)
                     break
+                case 'fullleft':
+                    if (checkboxValues['enableShiftRightLeft']) {
+                        if (pinned) {
+                            newIndex = 0
+                        } else {
+                            newIndex = pinCount
+                        }
+                        moveTab(tabId, newIndex)
+                        break
+                    } // otherwise go to below case
                 case 'left':
                     newIndex--
                     if (pinned) { //moving a pinned tab left
@@ -77,14 +101,14 @@ chrome.extension.onRequest.addListener(
                         if (newIndex < 0) newIndex = (tabCount - 1)
                         else if (tabs[newIndex].pinned) newIndex = (tabCount - 1)
                     }
-                    chrome.tabs.move(tabId, {index:newIndex})
+                    moveTab(tabId, newIndex)
                     break 
                 case 'pin':
                     if (pinned) {
                         chrome.tabs.update(tabId, {pinned:false})
                         var tabPosKey = 'tab_'+tabId
                         if (tabPosKey in localStorage && checkboxValues["unpinToOriginalPos"]) {
-                            chrome.tabs.move(tabId, {index: parseInt(localStorage[tabPosKey])})
+                            moveTab(tabId, parseInt(localStorage[tabPosKey]))
                             delete localStorage[tabPosKey]
                         }
                     }
@@ -93,16 +117,19 @@ chrome.extension.onRequest.addListener(
                         chrome.tabs.update(tabId, {pinned:true})
                         if (!checkboxValues["keepFocusWhenPinning"]) {
                             if (rightTab) {
-                            chrome.tabs.update(rightTab.id, {active:true})
-                        } else if (leftTab) {
-                            chrome.tabs.update(leftTab.id, {active:true})
-                        }
+                                activateTab(rightTab.id)
+                            } else if (leftTab) {
+                                activateTab(leftTab.id)
+                            }
                         } else {
-                            chrome.tabs.update(tabId, {active:true})
+                            activateTab(tabId)
                         }
                     }
                     break
                 case 'newWinDown': // this key stroke cycles the tab among windows
+                    if (!checkboxValues['enableShiftDown']) {
+                        break
+                    }
                     chrome.windows.getAll({windowTypes : ['normal']}, function(windows) {
                         if (windows.length > 1) { // if only one window only thing to do is move to new tab
                             var newWinId = findNextLargestInWindowArray(windows, activeWindowId)
@@ -125,7 +152,11 @@ chrome.extension.onRequest.addListener(
                     })
                         
                     break
-                case 'shiftSpace': // brings current tab to new window, and back
+                // brings current tab to new window, and back
+                case 'shiftSpace':
+                    if (!checkboxValues['enableShiftSpace']) {
+                        break
+                    } 
                     if (tabCount > 1) {
                         chrome.windows.create({tabId: tabId}, function(window) {
                             chrome.tabs.update(tabId, {'pinned' : pinned})
@@ -156,6 +187,15 @@ chrome.extension.onRequest.addListener(
             }
           })}
 )
+
+// move tab with no function callback
+function moveTab(tabId, toPos) {
+    chrome.tabs.move(tabId, {index: toPos})
+}
+
+function activateTab(tabId) {
+    chrome.tabs.update(tabId, {active:true})
+}
 
 function windowIdInWindowArray(winArr, winId) {
     for (var i = 0; i < winArr.length; i++) {
