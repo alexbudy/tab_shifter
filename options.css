@@ -1,4 +1,39 @@
-ul
-{	
-    list-style-type: none;
+table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    font-size: 100%;
+    background: transparent;
+}
+
+/**
+table#defaultCommands tr:nth-child(even) {
+	background-color: #f2f2f2
+}
+**/
+
+input[name='options'] {
+	margin-left: 25px;
+}
+
+ul {
+	margin-left: 25px;
+	padding-left:0;
+	list-style: none;
+}
+
+td.command {
+	/*padding-left: 25px;*/
+	padding-right: 5px;
+	text-align: right;
+}
+
+#all-keyboard-shtcts-cell {
+	text-align: left;
+	padding-left: 40px;
+}
+
+#all-keyboard-shtcts-cell a {
+    color: #0060B6;
+    text-decoration: none;
 }
