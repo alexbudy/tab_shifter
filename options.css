@@ -12,6 +12,11 @@ table#defaultCommands tr:nth-child(even) {
 }
 **/
 
+.generalDirections {
+	margin-left: 25px;
+	font-size: 120%
+}
+
 input[name='options'] {
 	margin-left: 25px;
 }
@@ -37,3 +42,16 @@ td.command {
     color: #0060B6;
     text-decoration: none;
 }
+
+#creatorUrl {
+
+}
+
+.inequality-sign {
+	font-weight: bold;
+	font-size: 140%;
+}
+
+.shrinkpercentage {
+}
+

@@ -7,7 +7,9 @@ chrome.storage.sync.get({
         unpinToOriginalPos : true,
         enableShiftSpace : true,
         enableShiftDown : true,
-        enableShiftRightLeft : false
+        enableShiftRightLeft : false,
+        enableMoveWindowRightLeft : false,
+        enableResizeWindow : false
 
     }, function(items) {
         for (item in items) {
@@ -130,16 +132,20 @@ chrome.extension.onRequest.addListener(
                     if (!checkboxValues['enableShiftDown']) {
                         break
                     }
+                    // if alt key pressed dont keep focus
                     chrome.windows.getAll({windowTypes : ['normal']}, function(windows) {
                         if (windows.length > 1) { // if only one window only thing to do is move to new tab
                             var newWinId = findNextLargestInWindowArray(windows, activeWindowId)
 
                            chrome.tabs.move(tabId, {index : -1, windowId : newWinId}, function(tab) {
                                 chrome.tabs.update(tab.id, {'active': true, 'pinned': pinned}, function(tab) {
-                                    chrome.windows.update(tab.windowId, {focused : true})
-                                    
+                                    if (!request.altPressed) {
+                                        chrome.windows.update(tab.windowId, {focused : true})
+                                    }
                                 })
+
                            })
+                            
                             delete localStorage[tabId + "_win_from"]
                             delete localStorage[tabId + "_prev_win_tab_pos"]
                         } else if (tabCount > 1){ // 
@@ -181,6 +187,41 @@ chrome.extension.onRequest.addListener(
                             }
                             delete localStorage[tabId + "_win_from"]
                             delete localStorage[tabId + "_prev_win_tab_pos"]
+                        })
+                    }
+                    break
+                case 'moveWinLeft':
+                    if (checkboxValues['enableMoveWindowRightLeft']) {
+                        chrome.windows.update(activeTab.windowId, {left:  -100}, function (win) {
+                            chrome.windows.update(activeTab.windowId, {left:  0}) // then try to line up with monitor edge
+                        }) // first try to move over left
+                    }
+                    break
+                case 'moveWinRight':
+                    if (checkboxValues['enableMoveWindowRightLeft']) {
+                        chrome.windows.get(activeTab.windowId, function(win) {
+                            chrome.windows.update(activeTab.windowId, {left:  (screen.width + 5)})
+                            chrome.windows.get(activeTab.windowId, function(winMoved) {
+                                if (winMoved.left > screen.width) { //move back a little off went of screen
+                                    chrome.windows.update(activeTab.windowId, {left:  (winMoved.left - 100)})
+                                }
+                            })
+                        })
+                    }
+                    break
+                case 'maximizeWindow':
+                    if (checkboxValues['enableResizeWindow']) {
+                        chrome.windows.update(activeTab.windowId, {state: 'maximized'})
+                    }
+                    break
+                case 'shrinkWindow': // shrinks window by X%
+                    if (checkboxValues['enableResizeWindow']) {
+                        chrome.windows.get(activeTab.windowId, function(win) {
+                            chrome.windows.update(activeTab.windowId, 
+                                {width: Math.round(win.width * .75), height: Math.round(win.height * .75),
+                                    left: win.top +  Math.round(win.width * .12), 
+                                    top:  win.left + Math.round(win.height * .12)
+                                })
                         })
                     }
                     break

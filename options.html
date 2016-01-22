@@ -9,7 +9,21 @@
 	<table>
 	<tr><td>
 		<h1>Tab Shifter Settings</h1>
+			<div class="generalDirections">Move Active Tab Laterally in Tab Strip with <b>Ctrl+Right/Left</b> <i>[built-in to extension]</i>
+			<br>
+			Pin or Unpin Active Tab with <b>Ctrl+Up</b> <i>[built-in to extension]</i>
+			</div>
 			<h2>General Settings</h2>
+			<!--
+			<table id="generalCommands">
+			<tr>
+				<td class="command"><b>Ctrl+Right/Left</b></td><td>move current tab right or left</td>
+			</tr>
+			<tr>
+				<td class="command"><b>Ctrl+Up</b></td><td>pin (if unpinned) or unpin (if pinned) current tab</td>
+			</tr>
+			</table>
+			-->
 			<input type="checkbox" name="options" id="disableWhileInTextbox" >
 			Disable Controls While Cursor in Text Box
 		
@@ -22,25 +36,33 @@
 			Move Tab to Original Position When Unpinning
 		
 
-		<h2>Move Between Windows Settings</h2>
+		<h2>Move Tab Between Windows</h2>
 		
 			<input type="checkbox" name="options" id="enableShiftSpace" >
 			Enable <b>Ctrl+Shift+Space</b> - bring current tab to new window and back
 		
 			<br>
 			<input type="checkbox" name="options" id="enableShiftDown" >
-			Enable <b>Ctrl+Shift+Down</b> - move current tab to next Chrome Window
+			Enable <b>Ctrl+Shift+[Alt]+Down</b> - move current tab to next Chrome Window
+			<span>[use <b>Alt</b> to keep focus on previous window]</span>
 		
 
-		<h2>Tab Moving Settings (Ctrl+Right/Left)</h2>
+		<h2>Move Tab in Window</h2>
 		
 			<input type="checkbox" name="options" id="enableShiftRightLeft" >
 			Enable <b>Ctrl+Shift+Right/Left</b> - move active tab all the way to the right or left
 
+		<h2>Move Window</h2>
+		
+			<input type="checkbox" name="options" id="enableMoveWindowRightLeft" >
+			Enable <b>Ctrl+Shift+</b><span class="inequality-sign"><</span> or <span class="inequality-sign">></span> - move current Chrome window left/right between monitors
+			<br>
+			<input type="checkbox" name="options" id="enableResizeWindow" >
+			Enable <b>Ctrl+Shift+</b><span class="inequality-sign">'</span> or <span class="inequality-sign">/</span> - maximize/shrink by <input  id="shrinkpercentage" type="number" min="1" max="100">% the current Chrome window
 		<br><br>		
 			
 			<table id="defaultCommands">
-				<th colspan=2><h2>Other Built-In Chrome Shortcuts you may find useful</h2></th>
+				<th colspan=2><h2>Other Chrome Shortcuts built into browser you may find useful</h2></th>
 			<tr>
 				<td class="command"><b>Ctrl+[Shift]+N</b></td><td>opens a new [incognito] window</td>
 			</tr>
@@ -60,6 +82,8 @@
 				<td></td><td id="all-keyboard-shtcts-cell">Full shortcut list <a href="https://support.google.com/chrome/answer/157179" target="_blank">here</a></td>
 			</tr>
 			</table>
+
+		    <a href="http://www.alexbudilovsky.com" id="creatorUrl">View more of my work/contact me</a>
 		<script type="text/javascript" src="options.js"></script>
 	</body>
 </html>

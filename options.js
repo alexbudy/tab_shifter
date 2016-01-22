@@ -11,7 +11,9 @@ function restore_options() {
 		unpinToOriginalPos : true,
 		enableShiftSpace : true,
 		enableShiftDown : true,
-		enableShiftRightLeft : false
+		enableShiftRightLeft : false,
+		enableMoveWindowRightLeft : false,
+		enableResizeWindow : false
 	}, function(items) {
 		var chkBoxes=document.getElementsByName("options")
 
