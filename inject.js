@@ -13,8 +13,8 @@ function moveTab(e)
     var SPACE = 32
 
     // window movement commands
-    var WINLEFT = 188
-    var WINRIGHT = 190
+    var WINLEFT = 219
+    var WINRIGHT = 221
     var MAXWIN = 222
     var MINWIN = 191
     var ALTKEY = 18

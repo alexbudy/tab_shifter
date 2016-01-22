@@ -218,11 +218,13 @@ chrome.extension.onRequest.addListener(
                     if (checkboxValues['enableResizeWindow']) {
                         chrome.windows.get(activeTab.windowId, function(win) {
                             var scale = (1 - parseInt(checkboxValues['shrinkPercentage'])/100)
+                            var newLeft = Math.round((screen.width - Math.round(win.width * scale))/2) - 70
+                            var newTop = Math.round((screen.height - Math.round(win.height * scale))/2) - 70
                             chrome.windows.update(activeTab.windowId, 
                                 {width: Math.round(win.width * scale), 
                                  height: Math.round(win.height * scale),
-                                    left: win.top +  Math.round(win.width * .12), 
-                                    top:  win.left + Math.round(win.height * .12)
+                                    left: newLeft, 
+                                    top:  win.top + Math.round(win.height * .12)
                                 })
                         })
                     }
