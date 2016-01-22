@@ -19,7 +19,6 @@ function restore_options() {
 		var chkBoxes=document.getElementsByName("options")
 		var shrinkbox = document.getElementById('shrinkpercentage')
 
-
 		for (var i = 0; i < chkBoxes.length; i++) {
 			var chkBox = chkBoxes[i]
 			chkBox.addEventListener('click', saveOptions)

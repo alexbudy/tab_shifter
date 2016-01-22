@@ -33,19 +33,19 @@ td.command {
 	text-align: right;
 }
 
+a {
+	color: #0060B6;
+}
+
 #all-keyboard-shtcts-cell {
 	text-align: left;
 	padding-left: 40px;
 }
 
-#all-keyboard-shtcts-cell a {
-    color: #0060B6;
+ a {
     text-decoration: none;
 }
 
-#creatorUrl {
-
-}
 
 .inequality-sign {
 	font-weight: bold;
@@ -55,4 +55,11 @@ td.command {
 #shrinkpercentage {
 	width: 30px;
 	text-align: right;
+}
+
+#contact {
+	padding-top: 50px;
+	position: fixed;
+    bottom: 10;
+    right: 10;
 }
