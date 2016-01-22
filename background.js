@@ -9,7 +9,8 @@ chrome.storage.sync.get({
         enableShiftDown : true,
         enableShiftRightLeft : false,
         enableMoveWindowRightLeft : false,
-        enableResizeWindow : false
+        enableResizeWindow : false,
+        shrinkPercentage: 25
 
     }, function(items) {
         for (item in items) {
@@ -19,7 +20,7 @@ chrome.storage.sync.get({
 
 chrome.storage.onChanged.addListener(function(changes, namespace) {
     for (key in changes) {
-        checkboxValues[key] = changes[key].newValue   
+        checkboxValues[key] = changes[key].newValue  
     }
 })
 
@@ -216,8 +217,10 @@ chrome.extension.onRequest.addListener(
                 case 'shrinkWindow': // shrinks window by X%
                     if (checkboxValues['enableResizeWindow']) {
                         chrome.windows.get(activeTab.windowId, function(win) {
+                            var scale = (1 - parseInt(checkboxValues['shrinkPercentage'])/100)
                             chrome.windows.update(activeTab.windowId, 
-                                {width: Math.round(win.width * .75), height: Math.round(win.height * .75),
+                                {width: Math.round(win.width * scale), 
+                                 height: Math.round(win.height * scale),
                                     left: win.top +  Math.round(win.width * .12), 
                                     top:  win.left + Math.round(win.height * .12)
                                 })
