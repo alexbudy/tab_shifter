@@ -26,7 +26,9 @@
 			-->
 			<input type="checkbox" name="options" id="disableWhileInTextbox" >
 			Disable Controls While Cursor in Text Box
-		
+			<br>
+			<input type="checkbox" name="options" id="enableShiftRightLeft" >
+			Enable <b>Ctrl+Shift+Right/Left</b> - move active tab all the way to the right or left
 
 		<h2>Pin/Unpin Tab Settings (Ctrl+Up)</h2>
 		<input type="checkbox" name="options" id="keepFocusWhenPinning" >
@@ -47,18 +49,13 @@
 			<span>[use <b>Alt</b> to keep focus on previous window]</span>
 		
 
-		<h2>Move Tab in Window</h2>
-		
-			<input type="checkbox" name="options" id="enableShiftRightLeft" >
-			Enable <b>Ctrl+Shift+Right/Left</b> - move active tab all the way to the right or left
-
 		<h2>Move Window</h2>
 		
 			<input type="checkbox" name="options" id="enableMoveWindowRightLeft" >
-			Enable <b>Ctrl+Shift+</b><span class="inequality-sign"><</span> or <span class="inequality-sign">></span> - move current Chrome window left/right between monitors
+			Enable <b>Ctrl+Shift+</b><span class="inequality-sign"><</span> or <span class="inequality-sign">></span> - move current Chrome window left/right between monitors (moves only if other monitors exist)
 			<br>
 			<input type="checkbox" name="options" id="enableResizeWindow" >
-			Enable <b>Ctrl+Shift+</b><span class="inequality-sign">'</span> or <span class="inequality-sign">/</span> - maximize/shrink by <input  id="shrinkpercentage" type="number" min="1" max="100">% the current Chrome window
+			Enable <b>Ctrl+Shift+</b><span class="inequality-sign">'</span> or <span class="inequality-sign">/</span> - maximize or shrink by <input  id="shrinkpercentage" type="number" min="1" max="100">% the current Chrome window
 		<br><br>		
 			
 			<table id="defaultCommands">

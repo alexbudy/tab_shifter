@@ -192,26 +192,25 @@ chrome.extension.onRequest.addListener(
                     break
                 case 'moveWinLeft':
                     if (checkboxValues['enableMoveWindowRightLeft']) {
-                        chrome.windows.update(activeTab.windowId, {left:  -100}, function (win) {
-                            chrome.windows.update(activeTab.windowId, {left:  0}) // then try to line up with monitor edge
-                        }) // first try to move over left
+                        chrome.windows.update(activeTab.windowId, {left:  -screen.width*2}, function (win) {
+                            maximizeWindow(activeTab.windowId) 
+                        })
                     }
                     break
                 case 'moveWinRight':
                     if (checkboxValues['enableMoveWindowRightLeft']) {
                         chrome.windows.get(activeTab.windowId, function(win) {
-                            chrome.windows.update(activeTab.windowId, {left:  (screen.width + 5)})
-                            chrome.windows.get(activeTab.windowId, function(winMoved) {
-                                if (winMoved.left > screen.width) { //move back a little off went of screen
-                                    chrome.windows.update(activeTab.windowId, {left:  (winMoved.left - 100)})
-                                }
+                            var origLeft = win.left
+                            var origTop = win.top
+                            chrome.windows.update(activeTab.windowId, {left:  (screen.width*2 + 5), top : origTop}, function(win2) {
+                                maximizeWindow(activeTab.windowId)
                             })
                         })
                     }
                     break
                 case 'maximizeWindow':
                     if (checkboxValues['enableResizeWindow']) {
-                        chrome.windows.update(activeTab.windowId, {state: 'maximized'})
+                        maximizeWindow(activeTab.windowId)
                     }
                     break
                 case 'shrinkWindow': // shrinks window by X%
@@ -236,6 +235,10 @@ function moveTab(tabId, toPos) {
 
 function activateTab(tabId) {
     chrome.tabs.update(tabId, {active:true})
+}
+
+function maximizeWindow(winId) {
+    chrome.windows.update(winId, {state:'maximized'})
 }
 
 function windowIdInWindowArray(winArr, winId) {
