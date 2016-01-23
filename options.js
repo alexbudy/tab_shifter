@@ -28,7 +28,6 @@ function restore_options() {
 				chkBox.addEventListener('click', toggleShrinkBox)
 			}
 		}
-
 		
 		if (items['enableResizeWindow']) {
 			shrinkbox.value = items['shrinkPercentage']
@@ -38,6 +37,12 @@ function restore_options() {
 
 		shrinkbox.addEventListener("keypress", validateKeyPress)
 		shrinkbox.addEventListener("keyup", saveShrinkPercentage)
+		shrinkbox.addEventListener("paste", function(e) {e.preventDefault()}) // don't allow pasting into textbox
+		shrinkbox.addEventListener("blur", function(e) { 
+			if (shrinkbox.value.length == 0) {
+				shrinkbox.value = items['shrinkPercentage']
+			} 
+		})
 	});
 }
 
@@ -55,27 +60,39 @@ function toggleShrinkBox(e) {
 }
 
 function validateKeyPress(e) {
-	var unicode=e.charCode? e.charCode : e.keyCode
-	var curVal = document.getElementById('shrinkpercentage').value
+	var shrinkBox = document.getElementById('shrinkpercentage')
+	var unicode = e.charCode ? e.charCode : e.keyCode
+	var curVal = shrinkBox.value
+
+    if (unicode!=8){ // if the key isn't the backspace key (which we should allow)
+        if (unicode<48||unicode>57) { // if not a number
+        	e.preventDefault()
+        	return 
+        }
+    }
+
+	if (shrinkBox.selectionStart == 0 && shrinkBox.selectionEnd == 2) {
+		shrinkBox.value = String.fromCharCode(event.which)
+	} else if (shrinkBox.selectionStart == 0 && shrinkBox.selectionEnd == 1) {
+		shrinkBox.value = String.fromCharCode(event.which)
+		if (curVal.length == 2) {
+			shrinkBox.value = shrinkBox.value + curVal[1]
+		}
+	} else if (shrinkBox.selectionStart == 1 && shrinkBox.selectionEnd == 2) {
+		shrinkBox.value = curVal[0] + String.fromCharCode(event.which)
+	}
+
 	if (curVal.length == 2) {
 		e.preventDefault()
 	}
-
-    if (unicode!=8){ //if the key isn't the backspace key (which we should allow)
-        if (unicode<48||unicode>57) {
-        	e.preventDefault()   
-        } //if not a number
-    }
 }
 
 function saveShrinkPercentage(e) {
 	var saveVal = document.getElementById('shrinkpercentage').value
 	if (saveVal.length == 0) {
-		saveVal = 25
+		return
 	}
 	chrome.storage.sync.set({shrinkPercentage : saveVal})
 }
 
 document.addEventListener('DOMContentLoaded', restore_options)
-
-

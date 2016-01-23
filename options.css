@@ -39,13 +39,11 @@ a {
 
 #all-keyboard-shtcts-cell {
 	text-align: left;
-	padding-left: 40px;
 }
 
  a {
     text-decoration: none;
 }
-
 
 .inequality-sign {
 	font-weight: bold;
@@ -55,6 +53,7 @@ a {
 #shrinkpercentage {
 	width: 30px;
 	text-align: right;
+	font-weight: bolder;
 }
 
 #contact {
