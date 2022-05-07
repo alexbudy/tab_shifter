@@ -1,21 +1,20 @@
 {
   "name": "Tab Shifter",
-  "version": "1.12",
-  "permissions": [
-    "tabs", "background", "storage"
-  ],
+  "version": "1.13",
+  "permissions": ["background", "storage"],
   "icons": {
-    "16"  : "icon16.png",
-    "48"  : "icon48.png",
-    "128" : "icon128.png"
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
   },
   "content_scripts": [
     {
       "matches": ["*://*/*"],
       "js": ["inject.js"]
-    }],
-  "background" : {
-      "scripts": ["background.js"]
+    }
+  ],
+  "background": {
+    "scripts": ["background.js"]
   },
   "options_page": "options.html",
   "manifest_version": 2
